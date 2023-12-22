@@ -1,24 +1,43 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../provider/AuthProvider';
 
-const Login = () => {
+const Register = () => {
+    const { createUser } = useContext(AuthContext);
+
+    const handleRegister = event => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
+        createUser(email, password)
+            .then(result => {
+                console.log(result.user)
+            })
+        
+    }
     return (
         <div className='grid lg:grid-cols-2 grid-cols-1'>
             <Helmet>
                 <title>
-                    Do Work | Login
+                    Do Work | Register
                 </title>
             </Helmet>
+
+            <div>
+                <img src="https://i.ibb.co/9hG20J9/privacy-policy-concept-illustration-114360-7853.jpg" alt="" />
+            </div>
 
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
 
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Register in to your account</h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border p-10 rounded-lg">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={handleRegister} action="#" method="POST">
                         <div>
                             <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                             <div className="mt-2">
@@ -28,7 +47,7 @@ const Login = () => {
 
                         <div>
                             <div className="flex items-center justify-between">
-                                <label  className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                                <label for="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 <div className="text-sm">
                                     <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
                                 </div>
@@ -46,19 +65,17 @@ const Login = () => {
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Not a member?
-                        <Link to="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Register</Link>
+                        <Link to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Login</Link>
                     </p>
                     <div className="divider">OR</div>
                     <button className='btn btn-block text-blue-700 '>Google</button>
                 </div>
             </div>
 
-            <div>
-                <img src="https://i.ibb.co/9hG20J9/privacy-policy-concept-illustration-114360-7853.jpg" alt="" />
-            </div>
+            
 
         </div>
     );
 };
 
-export default Login;
+export default Register;
