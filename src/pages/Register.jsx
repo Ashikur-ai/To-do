@@ -2,9 +2,14 @@ import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../provider/AuthProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 
 const Register = () => {
-    const { createUser } = useContext(AuthContext);
+    const { createUser, googleSignUp } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const handleRegister = event => {
         event.preventDefault();
@@ -14,10 +19,21 @@ const Register = () => {
         console.log(email, password);
         createUser(email, password)
             .then(result => {
-                console.log(result.user)
+                navigate(location?.state ? location?.state : '/')
+                toast.success('Register successful')
             })
         
     }
+
+    const handleGoogle = () => {
+        googleSignUp()
+            .then(result => {
+                navigate(location?.state ? location?.state : '/')
+                toast.success('Registration successful')
+        })
+    }
+
+    
     return (
         <div className='grid lg:grid-cols-2 grid-cols-1'>
             <Helmet>
@@ -65,10 +81,10 @@ const Register = () => {
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Not a member?
-                        <Link to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Login</Link>
+                        <Link to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Register</Link>
                     </p>
                     <div className="divider">OR</div>
-                    <button className='btn btn-block text-blue-700 '>Google</button>
+                    <button onClick={handleGoogle} className='btn btn-block text-blue-700 '>Google</button>
                 </div>
             </div>
 

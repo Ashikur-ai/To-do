@@ -1,8 +1,39 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../provider/AuthProvider';
+import toast from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
+    const { SignIn, googleSignUp } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+
+    const handleLogIn = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        SignIn(email, password)
+            .then(result => {
+                navigate(location?.state ? location?.state : '/dashboard')
+                toast.success('Login successfully')
+            })
+    }
+
+    const handleGoogle = () => {
+        googleSignUp()
+            .then(result => {
+                navigate(location?.state ? location?.state : '/dashboard')
+                toast.success('Registration successful')
+            })
+    }
+
+
     return (
         <div className='grid lg:grid-cols-2 grid-cols-1'>
             <Helmet>
@@ -18,7 +49,7 @@ const Login = () => {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border p-10 rounded-lg">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={handleLogIn} action="#" method="POST">
                         <div>
                             <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                             <div className="mt-2">
@@ -28,7 +59,7 @@ const Login = () => {
 
                         <div>
                             <div className="flex items-center justify-between">
-                                <label  className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                                <label className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 <div className="text-sm">
                                     <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
                                 </div>
@@ -40,7 +71,7 @@ const Login = () => {
                         </div>
 
                         <div>
-                            <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+                            <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Log in</button>
                         </div>
                     </form>
 
@@ -49,7 +80,7 @@ const Login = () => {
                         <Link to="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Register</Link>
                     </p>
                     <div className="divider">OR</div>
-                    <button className='btn btn-block text-blue-700 '>Google</button>
+                    <button onClick={handleGoogle} className='btn btn-block text-blue-700 '>Google</button>
                 </div>
             </div>
 
